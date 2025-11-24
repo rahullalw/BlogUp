@@ -2,88 +2,78 @@
 <html lang="en">
 <head>
    <%- include('./partials/head') %>
-    <title>Blog</title>
+    <title><%= blog.title %> - BlogUp</title>
 </head>
 <body>
    <%- include('./partials/nav') %>
-   <div class="container mt-3">
-    <h1><%= blog.title %></h1>
-   <img src="<%= blog.coverImageUrl %>" alt="" width="800px">
-   <pre class="container mt-3"><%= blog.body %></pre>
-   </div>
-
-   <div class="container mt-3 p-2">
-      <div class="d-flex align-items-center">
-         <!-- <%= JSON.stringify(blog.createdBy) %> -->
-         <!-- <img src="/images/avatar.avif" alt="Example AVIF Image" width="800px"> -->
-         <img class="rounded-circle shadow-1-strong me-3"
-                     src="<%= blog.createdBy.profileImage %>" alt="avatar" width="80"
-                     height="80" />
-         <h2><%= blog.createdBy.fullName %></h2>
-
-      </div>
-   </div>
-
-   <div class="container mt-3">
-      <h1> <%= comments.length %> Comments</h1>
-
-      <!-- //if user there then only give option to comment -->
-      <% if (locals.user) { %> 
-
-         <form id="commentForm" action="/blog/comment/<%= blog._id %>" method="post"> 
-            <!-- <div class="form-floating mb-3">
-               <input type="text" class="form-control" id="commentInput" placeholder="Type your comment here!!" aria-describedby="title" name="comment">
-               <label for="commentInput">Comment</label>
-             </div> -->
-     
-             <div class="card-footer py-3 border-2 mt-3" style="background-color: #f8f9fa;">
-              <div class="d-flex flex-start w-100">
-                <img class="rounded-circle shadow-1-strong me-3"
-                  src="<%= user.profileImageURL.startsWith('.') ? user.profileImageURL.slice(1) : user.profileImageURL %>" alt="avatar" width="60"
-                  height="60" />
-                <div data-mdb-input-init class="form-outline w-100">
-                 <div class="form-floating mb-3">
-                    <textarea type="text" class="form-control" id="commentInput"  aria-describedby="title" name="content" rows="4"></textarea>
-                    <label for="commentInput">Comment</label>
-                  </div>
-                  <!-- <textarea class="form-control" id="textAreaExample" rows="4"
-                    style="background: #fff;"></textarea>
-                  <label class="form-label" for="textAreaExample">Message</label> -->
-                </div>
-              </div>
-              <div class="float-end mt-3 pt-2">
-                <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary ">Post comment</button>
-                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary" onclick="document.getElementById('commentForm').reset();">Cancel</button>
-              </div>
-            </div>
-     
-             <!-- <button type="submit" class="btn btn-primary mt-3">Publish</button> -->
-     
-         </form>
-       
-      <% } %>
-      <div class="container mt-3">
-         <% comments.forEach(comment => { %>
-            <div class="d-flex align-items-start mb-3 pb-3 border-bottom">
-               <img class="rounded-circle shadow-1-strong me-3"
-                  src="<%= user.profileImageURL.startsWith('.') ? user.profileImageURL.slice(1) : user.profileImageURL %>" alt="avatar" width="50"
-                  height="50" />
-                  <div class="flex-grow-1">
-                     <h5 class="mb-1"><%= comment.createdBy.fullName %></h5>
-                     <p class="mb-0">
-                        <%= comment.content %>
-                     </p>
-
-                  </div>
-            </div>
-          
-         <% }) %>
-      </div>
-   </div>
-
-
    
-   
+   <div class="blog-container">
+      <article>
+         <header class="blog-header">
+            <h1 class="blog-title"><%= blog.title %></h1>
+            
+            <div class="blog-author">
+               <img src="<%= blog.createdBy.profileImage %>" alt="<%= blog.createdBy.fullName %>" />
+               <div>
+                  <h3 class="blog-author-name"><%= blog.createdBy.fullName %></h3>
+               </div>
+            </div>
+         </header>
+
+         <% if (blog.coverImageUrl) { %>
+            <img src="<%= blog.coverImageUrl %>" alt="<%= blog.title %>" class="blog-cover" />
+         <% } %>
+
+         <div class="blog-content">
+            <pre><%= blog.body %></pre>
+         </div>
+      </article>
+
+      <section class="comments-section">
+         <h2 class="comments-title">
+            <%= comments.length %> <%= comments.length === 1 ? 'Comment' : 'Comments' %>
+         </h2>
+
+         <% if (locals.user) { %> 
+            <form id="commentForm" action="/blog/comment/<%= blog._id %>" method="post" class="comment-form">
+               <div class="comment-form-header">
+                  <img src="<%= user.profileImageURL && user.profileImageURL.startsWith('.') ? user.profileImageURL.slice(1) : (user.profileImageURL || '/images/avatar.avif') %>" alt="Your avatar" />
+                  <div style="flex-grow: 1;">
+                     <textarea 
+                        id="commentInput" 
+                        name="content" 
+                        rows="4" 
+                        placeholder="Share your thoughts..."
+                        required></textarea>
+                  </div>
+               </div>
+               <div class="comment-form-actions">
+                  <button type="button" class="btn-modern-outline" onclick="document.getElementById('commentForm').reset();">Cancel</button>
+                  <button type="submit" class="btn-modern">Post Comment</button>
+               </div>
+            </form>
+         <% } %>
+
+         <div class="comments-list">
+            <% if (comments && comments.length > 0) { %>
+               <% comments.forEach(comment => { %>
+                  <div class="comment-item">
+                     <img 
+                        src="<%= comment.createdBy.profileImage %>" 
+                        alt="<%= comment.createdBy.fullName %>" 
+                        class="comment-avatar" />
+                     <div class="comment-content">
+                        <h5 class="comment-author"><%= comment.createdBy.fullName %></h5>
+                        <p class="comment-text"><%= comment.content %></p>
+                     </div>
+                  </div>
+               <% }) %>
+            <% } else { %>
+               <p class="text-muted text-center py-4">No comments yet. Be the first to share your thoughts!</p>
+            <% } %>
+         </div>
+      </section>
+   </div>
 
    <%- include('./partials/script') %>
 </body>

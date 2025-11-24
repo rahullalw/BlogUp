@@ -2,39 +2,55 @@
 <html lang="en">
   <head>
     <%- include('./partials/head') %>
-    <title>Signin</title>
+    <title>Sign In - BlogUp</title>
   </head>
   <body>
     <%- include('./partials/nav') %>
 
-    <div class="container mt-5">
-      <form action="/user/signin" method="post">
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"
-            >Email address</label
-          >
-          <input
-          name="email"
-            type="email"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-          />
-          <div id="emailHelp" class="form-text">
-            We'll never share your email with anyone else.
+    <div class="container mt-5 mb-5">
+      <div class="form-modern">
+        <h1 class="mb-1">Welcome back</h1>
+        <p class="text-muted mb-4">Sign in to continue to BlogUp</p>
+
+        <% if (locals.error) { %>
+          <div class="alert-modern alert-danger">
+            <%= locals.error %>
           </div>
-        </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
-          <input
-          name="password"
-            type="password"
-            class="form-control"
-            id="exampleInputPassword1"
-          />
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+        <% } %>
+
+        <form action="/user/signin" method="post">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email address</label>
+            <input
+              name="email"
+              type="email"
+              class="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              placeholder="you@example.com"
+              required
+            />
+            <div id="emailHelp" class="form-text">
+              We'll never share your email with anyone else.
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input
+              name="password"
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-modern w-100 mb-3">Sign In</button>
+          <p class="text-center text-muted mb-0">
+            Don't have an account? <a href="/user/signup" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">Sign up</a>
+          </p>
+        </form>
+      </div>
     </div>
 
     <%- include('./partials/script') %>

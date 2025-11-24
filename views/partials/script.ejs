@@ -3,3 +3,57 @@
   integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
   crossorigin="anonymous"
 ></script>
+<script>
+  // Dark Mode Toggle - Fast frontend switching
+  (function() {
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    // Toggle function
+    function toggleTheme() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+    
+    // Add click event
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
+  })();
+  
+  // Close mobile menu when clicking outside
+  (function() {
+    const navbarToggler = document.querySelector('.navbar-toggler-modern');
+    const navbarCollapse = document.querySelector('#navbarNavDropdown');
+    
+    if (navbarToggler && navbarCollapse) {
+      // Close menu when clicking on a link
+      const navLinks = navbarCollapse.querySelectorAll('.nav-link-modern');
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth < 992) {
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+            if (bsCollapse) {
+              bsCollapse.hide();
+            }
+          }
+        });
+      });
+      
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (window.innerWidth < 992 && navbarCollapse.classList.contains('show')) {
+          if (!navbarCollapse.contains(e.target) && !navbarToggler.contains(e.target)) {
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+            if (bsCollapse) {
+              bsCollapse.hide();
+            }
+          }
+        }
+      });
+    }
+  })();
+</script>

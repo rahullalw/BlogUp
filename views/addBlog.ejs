@@ -2,32 +2,55 @@
 <html lang="en">
 <head>
    <%- include('./partials/head') %>
-    <title>Home</title>
+    <title>Write a Blog - BlogUp</title>
 </head>
 <body>
    <%- include('./partials/nav') %>
 
-   <div class="container mt-3">
-    <form action="/blog" method="post" enctype="multipart/form-data">
+   <div class="add-blog-container">
+      <div class="add-blog-form">
+         <h1 class="mb-4">Write Your Story</h1>
+         
+         <form action="/blog" method="post" enctype="multipart/form-data">
+            <div class="mb-4">
+               <label for="formFile" class="form-label">Cover Image</label>
+               <input 
+                  class="form-control" 
+                  type="file" 
+                  id="formFile" 
+                  name="coverImage"
+                  accept="image/*">
+               <div class="form-text">Upload a cover image for your blog post</div>
+            </div>
 
-          <div class="mb-3">
-            <label for="formFile" class="form-label">Cover Image</label>
-            <input class="form-control" type="file" id="formFile" name="coverImage">
-          </div>
+            <div class="mb-4">
+               <label for="titleInput" class="form-label">Title</label>
+               <input 
+                  type="text" 
+                  class="form-control" 
+                  id="titleInput" 
+                  placeholder="Enter your blog title" 
+                  aria-describedby="title" 
+                  name="title"
+                  required>
+            </div>
 
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="titleInput" placeholder="Title" aria-describedby="title" name="title">
-            <label for="titleInput">Title</label>
-          </div>
+            <div class="mb-4">
+               <label for="floatingTextarea" class="form-label">Content</label>
+               <textarea 
+                  class="form-control" 
+                  placeholder="Write your blog content here..." 
+                  id="floatingTextarea" 
+                  name="body"
+                  required></textarea>
+            </div>
 
-        <div class="form-floating">
-            <textarea class="form-control" placeholder="Write your Blog content here" id="floatingTextarea" name="body" style="height: 100px"></textarea>
-            <label for="floatingTextarea">Body</label>
-          </div>
-
-          <button type="submit" class="btn btn-primary mt-3">Publish</button>
-
-    </form>
+            <div class="d-flex gap-3">
+               <button type="submit" class="btn-modern">Publish</button>
+               <a href="/" class="btn-modern-outline">Cancel</a>
+            </div>
+         </form>
+      </div>
    </div>   
 
    <%- include('./partials/script') %>

@@ -4,11 +4,15 @@ const User = require('../models/user')
 const router = Router();
 
 router.get("/signin", (req, res) => {
-    return res.render("signin");
+    return res.render("signin", {
+        user: req.user
+    });
 });
 
 router.get("/signup", (req, res) => {
-    return res.render("signup");
+    return res.render("signup", {
+        user: req.user
+    });
 });
 
 router.post("/signin", async (req, res)=> {
@@ -21,6 +25,7 @@ router.post("/signin", async (req, res)=> {
     } catch (error) {
         console.error("Error during sign-in:", error);
         return res.render("signin", {
+            user: req.user,
             error: "Incorrect Password or Email"
         })
     }
@@ -43,6 +48,7 @@ router.post("/signup", async (req, res) => {
         console.error("Error during sign-up:", error);
         // Handle the error appropriately, maybe render the signup page with an error message
         return res.status(500).render("signup", {
+            user: req.user,
             error: "An error occurred during sign-up. Please try again."
         });
         

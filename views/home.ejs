@@ -2,31 +2,45 @@
 <html lang="en">
 <head>
    <%- include('./partials/head') %>
-    <title>Home</title>
+    <title>Home - BlogUp</title>
 </head>
 <body>
    <%- include('./partials/nav') %>
-   <div class="container mt-3">
-      <div class="row row-cols-1 row-cols-md-3 g-5">
-         <% blogs.forEach(blog => { %>
-         <div class="col">
-            <div class="card " style="width: 18rem; height: 20rem;">
-                     <img src="<%= blog.coverImageUrl %>" class="card-img-top" alt="..." style="height: 12rem; object-fit: cover;">
-                     <div class="card-body d-flex flex-column">
-                       <h5 class="card-title"><%= blog.title %></h5>
-                       <a href= <%= `blog/${blog._id}` %> class="btn btn-primary  mt-auto">Click to View</a>
-                     </div>
-            </div>
-
-         </div>
-                  
-         <% }) %>
-
+   
+   <div class="home-container">
+      <div class="home-header">
+         <h1 class="home-title">Discover Stories</h1>
+         <p class="home-subtitle">Read, write, and share your thoughts with the world</p>
       </div>
+
+      <% if (blogs && blogs.length > 0) { %>
+         <div class="blogs-grid">
+            <% blogs.forEach(blog => { %>
+               <div class="card-modern">
+                  <% if (blog.coverImageUrl) { %>
+                     <img src="<%= blog.coverImageUrl %>" alt="<%= blog.title %>" />
+                  <% } %>
+                  <div class="card-modern-body">
+                     <h3 class="card-modern-title"><%= blog.title %></h3>
+                     <div class="card-modern-link">
+                        <a href="/blog/<%= blog._id %>" class="btn-modern">Read Article</a>
+                     </div>
+                  </div>
+               </div>
+            <% }) %>
+         </div>
+      <% } else { %>
+         <div class="text-center mt-section">
+            <h2>No blogs yet</h2>
+            <p class="text-muted">Be the first to share your story!</p>
+            <% if (locals.user) { %>
+               <a href="/blog/add-blog" class="btn-modern mt-3">Write Your First Blog</a>
+            <% } else { %>
+               <a href="/user/signup" class="btn-modern mt-3">Get Started</a>
+            <% } %>
+         </div>
+      <% } %>
    </div>
-   
-   
-   <!-- <%= JSON.stringify(blogs)%>    -->
 
    <%- include('./partials/script') %>
 </body>

@@ -1,39 +1,68 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary  bg-dark"  data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">BlogUp</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+<nav class="navbar-modern-wrapper">
+  <div class="navbar-modern-container">
+    <div class="navbar-modern-content">
+      <a class="navbar-brand-modern" href="/">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L4 6L12 10L20 6L12 2Z" fill="#2962FF"/>
+          <path d="M4 18L12 22L20 18" stroke="#2962FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 12L12 16L20 12" stroke="#2962FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="6" r="3" fill="white"/>
+        </svg>
+        <span class="logo-text">BlogUp</span>
+      </a>
+      
+      <button class="navbar-toggler-modern" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
+      
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
+        <ul class="navbar-nav-modern">
+          <li class="nav-item-modern">
+            <a class="nav-link-modern" aria-current="page" href="/">Home</a>
           </li>
           <% if (locals.user) { %>
-            <li class="nav-item">
-              <a class="nav-link" href="/blog/add-blog">Add Blog</a>
+            <li class="nav-item-modern">
+              <a class="nav-link-modern" href="/blog/add-blog">Write</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                IronFist
+            <li class="nav-item-modern dropdown-modern">
+              <a class="nav-link-modern dropdown-toggle-modern" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <% if (locals.user.profileImageURL) { %>
+                  <img src="<%= locals.user.profileImageURL.startsWith('.') ? locals.user.profileImageURL.slice(1) : locals.user.profileImageURL %>" alt="avatar" width="24" height="24" class="avatar-small">
+                <% } %>
+                <%= locals.user.fullName || locals.user.email || 'User' %>
+                <svg class="chevron-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
               </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+              <ul class="dropdown-menu-modern">
+                <li><a class="dropdown-item-modern" href="/user/logout">Logout</a></li>
               </ul>
             </li>
-
           <% } else { %>
-            <li class="nav-item">
-              <a class="nav-link" href="/user/signup">Create Account</a>
+            <li class="nav-item-modern">
+              <a class="nav-link-modern btn-signin" href="/user/signin">Sign in</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/user/signin">Sign In</a>
+            <li class="nav-item-modern">
+              <a class="nav-link-modern btn-create-account" href="/user/signup">Create Account</a>
             </li>
-            <% } %>
+          <% } %>
+          <li class="nav-item-modern">
+            <button class="theme-toggle-modern" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+              <svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+              <svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+              </svg>
+            </button>
+          </li>
         </ul>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <% if (locals.error) { %>
     <div class="container mt-3">
