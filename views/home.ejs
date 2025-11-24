@@ -16,17 +16,25 @@
       <% if (blogs && blogs.length > 0) { %>
          <div class="blogs-grid">
             <% blogs.forEach(blog => { %>
-               <div class="card-modern">
+               <% 
+                  const words = blog.body ? blog.body.split(/\s+/).length : 0;
+                  const readingTime = Math.max(1, Math.ceil(words / 200));
+                  let authorName = blog.createdBy ? (blog.createdBy.fullName || blog.createdBy.email || 'Anonymous') : 'Anonymous';
+               
+                  authorName = authorName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+               %>
+               <a href="/blog/<%= blog._id %>" class="card-modern blog-card-link">
                   <% if (blog.coverImageUrl) { %>
                      <img src="<%= blog.coverImageUrl %>" alt="<%= blog.title %>" />
                   <% } %>
                   <div class="card-modern-body">
                      <h3 class="card-modern-title"><%= blog.title %></h3>
-                     <div class="card-modern-link">
-                        <a href="/blog/<%= blog._id %>" class="btn-modern">Read Article</a>
+                     <div class="card-modern-meta">
+                        <span class="card-author"><%= authorName %></span>
+                        <span class="card-reading-time"><%= readingTime %> min read</span>
                      </div>
                   </div>
-               </div>
+               </a>
             <% }) %>
          </div>
       <% } else { %>

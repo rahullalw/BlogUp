@@ -26,8 +26,8 @@
             <li class="nav-item-modern">
               <a class="nav-link-modern" href="/blog/add-blog">Write</a>
             </li>
-            <li class="nav-item-modern dropdown-modern">
-              <a class="nav-link-modern dropdown-toggle-modern" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <li class="nav-item-modern dropdown dropdown-modern">
+              <a class="nav-link-modern dropdown-toggle dropdown-toggle-modern" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <% if (locals.user.profileImageURL) { %>
                   <img src="<%= locals.user.profileImageURL.startsWith('.') ? locals.user.profileImageURL.slice(1) : locals.user.profileImageURL %>" alt="avatar" width="24" height="24" class="avatar-small">
                 <% } %>
@@ -36,8 +36,8 @@
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </a>
-              <ul class="dropdown-menu-modern">
-                <li><a class="dropdown-item-modern" href="/user/logout">Logout</a></li>
+              <ul class="dropdown-menu dropdown-menu-modern">
+                <li><a class="dropdown-item dropdown-item-modern dropdown-item-logout" href="/user/logout">Logout</a></li>
               </ul>
             </li>
           <% } else { %>
