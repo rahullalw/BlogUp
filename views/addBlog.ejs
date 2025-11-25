@@ -48,13 +48,44 @@
             </div>
 
             <div class="mb-4">
-               <label for="floatingTextarea" class="form-label">Content</label>
-               <textarea 
-                  class="form-control" 
-                  placeholder="Write your blog content here..." 
-                  id="floatingTextarea" 
-                  name="body"
-                  required></textarea>
+               <label for="floatingTextarea" class="form-label">Content (Markdown)</label>
+               <div class="markdown-editor-container">
+                  <div class="markdown-editor-wrapper">
+                     <div class="markdown-tabs">
+                        <button type="button" class="markdown-tab active" data-tab="write">Write</button>
+                        <button type="button" class="markdown-tab" data-tab="preview">Preview</button>
+                     </div>
+                     <div class="markdown-write-panel active" id="writePanel">
+                        <textarea 
+                           class="form-control markdown-editor" 
+                           placeholder="Write your blog content in Markdown format...
+
+# Heading 1
+## Heading 2
+### Heading 3
+
+**Bold text** and *italic text*
+
+- List item 1
+- List item 2
+
+[Link text](url)
+
+\`\`\`code\`\`\`" 
+                           id="floatingTextarea" 
+                           name="body"
+                           required></textarea>
+                     </div>
+                     <div class="markdown-preview-panel" id="previewPanel">
+                        <div class="markdown-preview markdown-body"></div>
+                     </div>
+                  </div>
+                  <div class="markdown-help">
+                     <small class="text-muted">
+                        💡 Use Markdown syntax: **bold**, *italic*, # headings, - lists, \`code\`, [links](url)
+                     </small>
+                  </div>
+               </div>
             </div>
 
             <div class="d-flex gap-3">
@@ -67,12 +98,65 @@
 
    <%- include('./partials/script') %>
    
+   <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
    <script>
       const aiSuggestBtn = document.getElementById('aiSuggestBtn');
       const titleInput = document.getElementById('titleInput');
       const contentInput = document.getElementById('floatingTextarea');
       const suggestionsDiv = document.getElementById('titleSuggestions');
+      const writePanel = document.getElementById('writePanel');
+      const previewPanel = document.getElementById('previewPanel');
+      const previewDiv = previewPanel.querySelector('.markdown-preview');
+      const tabs = document.querySelectorAll('.markdown-tab');
 
+      // Configure marked
+      if (typeof marked !== 'undefined') {
+         marked.setOptions({
+            breaks: true,
+            gfm: true,
+         });
+      }
+
+      // Tab switching
+      tabs.forEach(tab => {
+         tab.addEventListener('click', () => {
+            const tabName = tab.dataset.tab;
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            writePanel.classList.remove('active');
+            previewPanel.classList.remove('active');
+            
+            if (tabName === 'write') {
+               writePanel.classList.add('active');
+            } else {
+               previewPanel.classList.add('active');
+               updatePreview();
+            }
+         });
+      });
+
+      // Live preview update
+      function updatePreview() {
+         const markdown = contentInput.value;
+         if (typeof marked !== 'undefined') {
+            previewDiv.innerHTML = marked.parse(markdown);
+         } else {
+            previewDiv.innerHTML = '<p class="text-muted">Markdown preview not available. Please install marked library.</p>';
+         }
+      }
+
+      // Update preview on input (debounced)
+      let previewTimeout;
+      contentInput.addEventListener('input', () => {
+         clearTimeout(previewTimeout);
+         if (previewPanel.classList.contains('active')) {
+            previewTimeout = setTimeout(updatePreview, 300);
+         }
+      });
+
+      // AI Title Suggestions
       aiSuggestBtn.addEventListener('click', async () => {
          const content = contentInput.value.trim();
          

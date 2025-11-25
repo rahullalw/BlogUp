@@ -18,7 +18,7 @@
             <% blogs.forEach(blog => { %>
                <% 
                   const words = blog.body ? blog.body.split(/\s+/).length : 0;
-                  const readingTime = Math.max(1, Math.ceil(words / 200));
+                  const readingTime = Math.max(1, Math.ceil(words / 100));
                   let authorName = blog.createdBy ? (blog.createdBy.fullName || blog.createdBy.email || 'Anonymous') : 'Anonymous';
                
                   authorName = authorName.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
@@ -28,15 +28,7 @@
                      <img src="<%= blog.coverImageUrl %>" alt="<%= blog.title %>" />
                   <% } %>
                   <div class="card-modern-body">
-                     <h3 class="card-modern-title">
-                        <%= blog.title %>
-                        <% if (blog.summary) { %>
-                           <span class="badge bg-primary ms-2" style="font-size: 0.6rem;">✨ AI</span>
-                        <% } %>
-                     </h3>
-                     <% if (blog.summary) { %>
-                        <p class="text-muted" style="font-size: 0.9rem; margin-top: 0.5rem;"><%= blog.summary.substring(0, 120) %><%= blog.summary.length > 120 ? '...' : '' %></p>
-                     <% } %>
+                     <h3 class="card-modern-title"><%= blog.title %></h3>
                      <div class="card-modern-meta">
                         <span class="card-author"><%= authorName %></span>
                         <span class="card-reading-time"><%= readingTime %> min read</span>

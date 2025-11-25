@@ -38,14 +38,28 @@ router.get("/add-blog", (req, res)=> {
 router.get("/:id", async (req, res)=> {
   const blog = await Blog.findById(req.params.id).populate('createdBy');
   const comments = await Comment.find({blogId: req.params.id}).populate('createdBy')
-  // console.log(comments)
   blog.createdBy.fullName = capitalizeWords(blog.createdBy.fullName)
-  // blog.createdBy.profileImage = removeLeadingDot(blog.createdBy.profileImage);
-  // console.log(blog);
+  
+  // Parse markdown content using dynamic import
+  let markdownContent = '';
+  try {
+    const { marked } = await import('marked');
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+    });
+    markdownContent = marked.parse(blog.body || '');
+  } catch (error) {
+    console.error('Error parsing markdown:', error);
+    // Fallback to plain text if markdown parsing fails
+    markdownContent = blog.body || '';
+  }
+  
   res.render("blog", {
     user: req.user,
     blog,
     comments,
+    markdownContent,
   })
 })
 
@@ -107,6 +121,68 @@ router.post("/api/suggest-titles", async (req, res) => {
   } catch (error) {
     console.error('Error in suggest-titles:', error.message);
     res.status(500).json({ titles: [], error: 'Failed to generate titles' });
+  }
+})
+
+router.post("/:id/reaction", async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Please sign in to react' });
+    }
+
+    const { reaction } = req.body;
+    const blogId = req.params.id;
+    const userId = req.user._id;
+
+    if (!['heart', 'thumbsUp', 'informative'].includes(reaction)) {
+      return res.status(400).json({ success: false, message: 'Invalid reaction type' });
+    }
+
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
+      return res.status(404).json({ success: false, message: 'Blog not found' });
+    }
+
+    // Initialize reactions if they don't exist
+    if (!blog.reactions) {
+      blog.reactions = {
+        heart: { count: 0, users: [] },
+        thumbsUp: { count: 0, users: [] },
+        informative: { count: 0, users: [] }
+      };
+    }
+
+    const reactionData = blog.reactions[reaction];
+    if (!reactionData) {
+      blog.reactions[reaction] = { count: 0, users: [] };
+    }
+
+    const userIndex = reactionData.users.findIndex(id => id.toString() === userId.toString());
+    let added = false;
+
+    if (userIndex === -1) {
+      // User hasn't reacted, add reaction
+      reactionData.users.push(userId);
+      reactionData.count += 1;
+      added = true;
+    } else {
+      // User already reacted, remove reaction
+      reactionData.users.splice(userIndex, 1);
+      reactionData.count -= 1;
+      added = false;
+    }
+
+    await blog.save();
+
+    res.json({
+      success: true,
+      count: reactionData.count,
+      added: added,
+      message: added ? `You ${reaction === 'heart' ? 'loved' : reaction === 'thumbsUp' ? 'liked' : 'found informative'} this!` : 'Reaction removed'
+    });
+  } catch (error) {
+    console.error('Error handling reaction:', error);
+    res.status(500).json({ success: false, message: 'Error updating reaction' });
   }
 })
 

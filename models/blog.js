@@ -22,6 +22,20 @@ const blogSchema = new Schema({
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: 'user',
+    },
+    reactions: {
+        heart: {
+            count: { type: Number, default: 0 },
+            users: [{ type: Schema.Types.ObjectId, ref: 'user' }]
+        },
+        thumbsUp: {
+            count: { type: Number, default: 0 },
+            users: [{ type: Schema.Types.ObjectId, ref: 'user' }]
+        },
+        informative: {
+            count: { type: Number, default: 0 },
+            users: [{ type: Schema.Types.ObjectId, ref: 'user' }]
+        }
     }
 }, {
     timestamps: true,
