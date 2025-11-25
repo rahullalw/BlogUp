@@ -54,7 +54,7 @@
             </div>
             
             <!-- Reactions Section -->
-            <div class="blog-reactions">
+            <div class="blog-reactions" data-user-logged-in="<%= locals.user ? 'true' : 'false' %>">
                <h3 class="reactions-title">What do you think?</h3>
                <div class="reactions-container">
                   <button 
@@ -115,6 +115,17 @@
          <h2 class="comments-title">
             <%= comments.length %> <%= comments.length === 1 ? 'Comment' : 'Comments' %>
          </h2>
+
+         <% if (!locals.user) { %>
+            <div class="comment-signup-prompt">
+               <p class="signup-text">💬 Want to join the conversation?</p>
+               <p class="signup-subtext">Sign in or sign up to share your thoughts!</p>
+               <div class="signup-actions">
+                  <a href="/user/signin" class="btn-modern">Sign In</a>
+                  <a href="/user/signup" class="btn-modern-outline">Sign Up</a>
+               </div>
+            </div>
+         <% } %>
 
          <% if (locals.user) { %> 
             <form id="commentForm" action="/blog/comment/<%= blog._id %>" method="post" class="comment-form">
@@ -259,7 +270,8 @@
       }
       
       // Handle Reactions
-      const isUserLoggedIn = <%- JSON.stringify(!!locals.user) %>;
+      const reactionsContainer = document.querySelector('.blog-reactions');
+      const isUserLoggedIn = reactionsContainer ? reactionsContainer.dataset.userLoggedIn === 'true' : false;
       
       function handleReaction(reactionType, blogId) {
          if (!isUserLoggedIn) {
