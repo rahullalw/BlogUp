@@ -3,6 +3,8 @@ const Blog = require("../models/blog");
 const Comment = require("../models/comment");
 const multer = require("multer");
 const path = require("path");
+const { generateTitleSuggestions, generateSummary } = require("../service/aiService");
+const { generateBlogCoverImage } = require("../service/imageGenerator");
 
 
 const router = Router();
@@ -49,27 +51,63 @@ router.get("/:id", async (req, res)=> {
 
 router.post("/",upload.single("coverImage") , async (req, res)=> {
     const { title, body } = req.body;
+    
+    const summary = await generateSummary(body);
+    
+    let coverImageUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
+    
+    // Generate AI cover image if no image uploaded
+    if (!coverImageUrl) {
+        const tempBlog = await Blog.create({
+            title,
+            body,
+            summary,
+            createdBy: req.user._id,
+            coverImageUrl: "./images/default-blog.png",
+        });
+        
+        const aiImageUrl = await generateBlogCoverImage(title, tempBlog._id);
+        if (aiImageUrl) {
+            tempBlog.coverImageUrl = aiImageUrl;
+            await tempBlog.save();
+        }
+        
+        console.log(`Blog title: "${tempBlog.title}" added with AI-generated cover`);
+        return res.redirect(`/blog/${tempBlog._id}`);
+    }
+    
     const blog = await Blog.create({
         title,
         body,
+        summary,
         createdBy: req.user._id,
-        coverImageUrl: req.file ? `/uploads/${req.file.filename}`: undefined,
+        coverImageUrl,
     });
     console.log(`Blog title: "${blog.title}" added to database`);
-    // console.log(req.file, req.body);
-    return res.redirect(`/blog/${blog._id}`);//new route for each blog
+    return res.redirect(`/blog/${blog._id}`);
 })
 
 router.post("/comment/:blogId", async (req,res)=> {
-  // console.log(req.body);
   await Comment.create({
     content: req.body.content,
     blogId: req.params.blogId,
     createdBy: req.user._id,
   })
   res.redirect(`/blog/${req.params.blogId}`);
-
 })
 
+router.post("/api/suggest-titles", async (req, res) => {
+  try {
+    const { content } = req.body;
+    if (!content || content.trim().length < 50) {
+      return res.json({ titles: [] });
+    }
+    const titles = await generateTitleSuggestions(content);
+    res.json({ titles });
+  } catch (error) {
+    console.error('Error in suggest-titles:', error.message);
+    res.status(500).json({ titles: [], error: 'Failed to generate titles' });
+  }
+})
 
 module.exports = router

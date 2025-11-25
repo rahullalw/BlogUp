@@ -20,19 +20,31 @@
                   id="formFile" 
                   name="coverImage"
                   accept="image/*">
-               <div class="form-text">Upload a cover image for your blog post</div>
+               <div class="form-text">
+                  Upload a cover image or leave empty to auto-generate an AI cover ✨
+               </div>
             </div>
 
             <div class="mb-4">
                <label for="titleInput" class="form-label">Title</label>
-               <input 
-                  type="text" 
-                  class="form-control" 
-                  id="titleInput" 
-                  placeholder="Enter your blog title" 
-                  aria-describedby="title" 
-                  name="title"
-                  required>
+               <div class="d-flex gap-2 align-items-center">
+                  <input 
+                     type="text" 
+                     class="form-control" 
+                     id="titleInput" 
+                     placeholder="Enter your blog title" 
+                     aria-describedby="title" 
+                     name="title"
+                     required>
+                  <button 
+                     type="button" 
+                     class="btn btn-outline-primary" 
+                     id="aiSuggestBtn"
+                     title="Get AI title suggestions">
+                     ✨ AI
+                  </button>
+               </div>
+               <div id="titleSuggestions" class="mt-2"></div>
             </div>
 
             <div class="mb-4">
@@ -54,5 +66,54 @@
    </div>   
 
    <%- include('./partials/script') %>
+   
+   <script>
+      const aiSuggestBtn = document.getElementById('aiSuggestBtn');
+      const titleInput = document.getElementById('titleInput');
+      const contentInput = document.getElementById('floatingTextarea');
+      const suggestionsDiv = document.getElementById('titleSuggestions');
+
+      aiSuggestBtn.addEventListener('click', async () => {
+         const content = contentInput.value.trim();
+         
+         if (content.length < 50) {
+            suggestionsDiv.innerHTML = '<small class="text-muted">Please write at least 50 characters of content first.</small>';
+            return;
+         }
+
+         aiSuggestBtn.disabled = true;
+         aiSuggestBtn.innerHTML = '⏳ Loading...';
+         suggestionsDiv.innerHTML = '<small class="text-muted">Generating AI suggestions...</small>';
+
+         try {
+            const response = await fetch('/blog/api/suggest-titles', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ content })
+            });
+
+            const data = await response.json();
+            
+            if (data.titles && data.titles.length > 0) {
+               suggestionsDiv.innerHTML = '<small class="text-muted mb-2 d-block">Click a suggestion to use it:</small>';
+               data.titles.forEach(title => {
+                  const btn = document.createElement('button');
+                  btn.type = 'button';
+                  btn.className = 'btn btn-sm btn-outline-secondary me-2 mb-2';
+                  btn.textContent = title;
+                  btn.onclick = () => titleInput.value = title;
+                  suggestionsDiv.appendChild(btn);
+               });
+            } else {
+               suggestionsDiv.innerHTML = '<small class="text-danger">No suggestions available. Try again.</small>';
+            }
+         } catch (error) {
+            suggestionsDiv.innerHTML = '<small class="text-danger">Error generating suggestions. Please try again.</small>';
+         } finally {
+            aiSuggestBtn.disabled = false;
+            aiSuggestBtn.innerHTML = '✨ AI';
+         }
+      });
+   </script>
 </body>
 </html>

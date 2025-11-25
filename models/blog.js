@@ -10,6 +10,10 @@ const blogSchema = new Schema({
         type: String,
         required: true,
     },
+    summary: {
+        type: String,
+        required: false,
+    },
     coverImageUrl: {
         type: String,
         required: false,

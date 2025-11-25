@@ -24,6 +24,7 @@ mongooseConnect(`${mongo_connect}/BlogUp`)
 });
 
 app.use(express.urlencoded({extended:false}));
+app.use(express.json());
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));// get token payload in req.user after validation
 
