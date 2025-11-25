@@ -12,6 +12,12 @@
          <header class="blog-header">
             <h1 class="blog-title"><%= blog.title %></h1>
             
+            <% if (blog.summary) { %>
+               <div class="alert alert-info mt-3" role="alert">
+                  <strong>✨ AI Summary:</strong> <%= blog.summary %>
+               </div>
+            <% } %>
+            
             <div class="blog-author">
                <img src="<%= blog.createdBy.profileImage %>" alt="<%= blog.createdBy.fullName %>" />
                <div>
