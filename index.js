@@ -38,7 +38,7 @@ app.use("/user", userRoute);
 app.get("/", async (req, res) => {
     // console.log(req.user);
 
-    const allBlogs = await Blog.find({}).populate('createdBy', 'fullName email')
+    const allBlogs = await Blog.find({}).populate('createdBy', 'fullName email').sort({ createdAt: -1 })
     return res.render("home", {
         user: req.user, //pass payload which we got from checkForAuthenticationCookie
         blogs: allBlogs,
