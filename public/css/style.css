@@ -1435,7 +1435,8 @@ p {
   padding: 2rem;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
-  margin-bottom: 2rem;
+  margin: 2rem auto;
+  max-width: 1400px;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
 
@@ -1851,53 +1852,44 @@ p {
 }
 
 @media (max-width: 768px) {
-  .blog-title {
+  /* Home Page Mobile Styles */
+  .home-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .home-title {
     font-size: 2rem;
+    margin-bottom: 0.75rem;
   }
   
-  .blog-content {
-    padding: 2rem 1.5rem;
-  }
-  
-  .blog-paragraph {
+  .home-subtitle {
     font-size: 1rem;
-    line-height: 1.75;
-    margin-bottom: 1.5rem;
   }
   
-  .blog-h2 {
-    font-size: 1.75rem;
-    margin-top: 2.5rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .blog-h3 {
-    font-size: 1.25rem;
+  .blogs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
     margin-top: 2rem;
-    margin-bottom: 1rem;
   }
   
-  .markdown-body h1 {
-    font-size: 2rem;
+  .card-modern-body {
+    padding: 1.25rem;
   }
   
-  .markdown-body h2 {
-    font-size: 1.75rem;
+  .card-modern-title {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
   }
   
-  .markdown-body h3 {
-    font-size: 1.5rem;
+  .card-modern img {
+    height: 180px;
   }
   
-  .markdown-body {
-    font-size: 1rem;
-  }
-  
-  /* Responsive Blog Reading Layout */
+  /* Blog Reading Page Mobile Styles */
   .blog-reading-container {
     grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 1rem;
+    gap: 1.5rem;
+    padding: 1rem 0.75rem;
   }
   
   .blog-sidebar {
@@ -1921,15 +1913,291 @@ p {
   
   .blog-header {
     text-align: left;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .blog-title {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .blog-summary {
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
   
   .blog-meta {
     justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .blog-cover {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+  }
+  
+  .blog-content {
+    padding: 1.5rem 1rem;
+    border-radius: 8px;
+  }
+  
+  .blog-paragraph {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+  
+  .blog-h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .blog-h3 {
+    font-size: 1.125rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .markdown-body {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  
+  .markdown-body h1 {
+    font-size: 1.75rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .markdown-body h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .markdown-body h3 {
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .markdown-body h4 {
+    font-size: 1.125rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .markdown-body p {
+    margin-bottom: 1.25rem;
+    line-height: 1.7;
+  }
+  
+  .markdown-body ul,
+  .markdown-body ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .markdown-body blockquote {
+    padding: 0.75rem 1rem;
+    margin: 1.25rem 0;
+    font-size: 0.95rem;
+  }
+  
+  .markdown-body pre {
+    padding: 1rem;
+    margin: 1.25rem 0;
+    font-size: 0.875rem;
+    overflow-x: auto;
+  }
+  
+  .markdown-body img {
+    margin: 1.25rem 0;
+  }
+  
+  .markdown-body table {
+    font-size: 0.875rem;
+  }
+  
+  .markdown-body table th,
+  .markdown-body table td {
+    padding: 0.5rem;
   }
   
   .toc-container {
     max-height: 300px;
     overflow-y: auto;
+  }
+  
+  .sidebar-content {
+    padding: 1rem;
+  }
+  
+  /* Comments Section Mobile */
+  .comments-section {
+    padding: 1.5rem 1rem;
+    margin: 1.5rem 1rem;
+  }
+  
+  .comments-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .comment-form {
+    padding: 1rem;
+  }
+  
+  .comment-form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .comment-form-header img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .comment-form textarea {
+    font-size: 0.95rem;
+    padding: 0.75rem;
+  }
+  
+  .comment-form-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .comment-form-actions .btn-modern,
+  .comment-form-actions .btn-modern-outline {
+    width: 100%;
+  }
+  
+  .comment-item {
+    padding: 1rem 0;
+    gap: 0.75rem;
+  }
+  
+  .comment-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .comment-author {
+    font-size: 0.95rem;
+  }
+  
+  .comment-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  .comment-signup-prompt {
+    padding: 1.5rem 1rem;
+  }
+  
+  .signup-text {
+    font-size: 1rem;
+  }
+  
+  .signup-subtext {
+    font-size: 0.875rem;
+  }
+  
+  .signup-actions {
+    flex-direction: column;
+  }
+  
+  .signup-actions .btn-modern,
+  .signup-actions .btn-modern-outline {
+    width: 100%;
+  }
+  
+  /* Reactions Mobile */
+  .blog-reactions {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+  
+  .reactions-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .reactions-container {
+    gap: 0.75rem;
+  }
+  
+  .reaction-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Add Blog Form Mobile */
+  .add-blog-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .add-blog-form {
+    padding: 1.5rem 1.25rem;
+  }
+  
+  .add-blog-form h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .add-blog-form textarea {
+    min-height: 300px;
+  }
+  
+  .markdown-editor,
+  .markdown-preview {
+    min-height: 300px;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .markdown-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Forms Mobile */
+  .form-modern {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+  
+  .form-modern h1 {
+    font-size: 1.75rem;
+  }
+  
+  /* Typography Mobile */
+  h1 {
+    font-size: 2rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+  }
+  
+  p {
+    font-size: 0.95rem;
   }
 }
 
@@ -2020,6 +2288,136 @@ p {
   
   .blog-content {
     padding: 2.5rem 3rem;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .home-container {
+    padding: 1rem 0.75rem;
+  }
+  
+  .home-title {
+    font-size: 1.75rem;
+  }
+  
+  .home-subtitle {
+    font-size: 0.95rem;
+  }
+  
+  .blogs-grid {
+    gap: 1.25rem;
+  }
+  
+  .card-modern-body {
+    padding: 1rem;
+  }
+  
+  .card-modern-title {
+    font-size: 1rem;
+  }
+  
+  .card-modern img {
+    height: 160px;
+  }
+  
+  .blog-reading-container {
+    padding: 0.75rem 0.5rem;
+    gap: 1.25rem;
+  }
+  
+  .blog-title {
+    font-size: 1.5rem;
+  }
+  
+  .blog-content {
+    padding: 1.25rem 0.75rem;
+  }
+  
+  .blog-paragraph {
+    font-size: 0.9rem;
+  }
+  
+  .markdown-body {
+    font-size: 0.9rem;
+  }
+  
+  .markdown-body h1 {
+    font-size: 1.5rem;
+  }
+  
+  .markdown-body h2 {
+    font-size: 1.25rem;
+  }
+  
+  .markdown-body h3 {
+    font-size: 1.125rem;
+  }
+  
+  .comments-section {
+    padding: 1.25rem 0.75rem;
+    margin: 1.25rem 0.75rem;
+  }
+  
+  .add-blog-form {
+    padding: 1.25rem 1rem;
+  }
+  
+  .form-modern {
+    padding: 1.5rem 1.25rem;
+    margin: 0.5rem;
+  }
+  
+  .navbar-modern-wrapper {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .navbar-modern-container {
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Ensure images don't overflow on mobile */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Improve text readability on mobile */
+@media (max-width: 768px) {
+  body {
+    font-size: 0.95rem;
+  }
+  
+  /* Better word wrapping */
+  .card-modern-title,
+  .blog-title,
+  h1, h2, h3, h4, h5, h6 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Prevent horizontal scrolling */
+  * {
+    max-width: 100%;
+  }
+  
+  /* Better spacing for buttons on mobile */
+  .btn-modern,
+  .btn-modern-outline {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  
+  /* Better form controls on mobile */
+  .form-control {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.75rem;
+  }
+  
+  textarea.form-control {
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 }
 
