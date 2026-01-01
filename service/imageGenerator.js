@@ -1,6 +1,4 @@
 const { createCanvas } = require('canvas');
-const fs = require('fs').promises;
-const path = require('path');
 
 const COLOR_PALETTES = [
   { bg: '#667eea', accent: '#764ba2', text: '#ffffff' },
@@ -101,16 +99,13 @@ async function generateBlogCoverImage(title, blogId) {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
     ctx.fillText('BlogUp', width / 2, height - 35);
 
-    // Save image
-    const uploadsDir = path.join(__dirname, '../public/uploads');
-    const filename = `ai-cover-${blogId}-${Date.now()}.png`;
-    const filepath = path.join(uploadsDir, filename);
-
+    // Convert to base64 data URI
     const buffer = canvas.toBuffer('image/png');
-    await fs.writeFile(filepath, buffer);
+    const base64Image = buffer.toString('base64');
+    const dataUri = `data:image/png;base64,${base64Image}`;
     
-    console.log(`✓ Canvas image generated: ${filename}`);
-    return `/uploads/${filename}`;
+    console.log(`✓ Canvas image generated as base64 for blog: ${blogId}`);
+    return dataUri;
   } catch (error) {
     console.error('Error generating cover image:', error.message);
     return null;

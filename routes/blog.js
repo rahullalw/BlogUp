@@ -17,17 +17,8 @@ function removeLeadingDot(str){
   return str.startsWith('.') ? str.slice(1) : str;
 }
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, `./public/uploads`)
-    },
-    filename: function (req, file, cb) {
-      const fileName = `${Date.now()}-${file.originalname}`;
-      cb(null, fileName);
-    }
-  })
-  
-  const upload = multer({ storage: storage })
+// Use memory storage and convert to base64
+const upload = multer({ storage: multer.memoryStorage() })
 
 router.get("/add-blog", (req, res)=> {
     return res.render("addBlog", {
@@ -68,9 +59,15 @@ router.post("/",upload.single("coverImage") , async (req, res)=> {
     
     const summary = await generateSummary(body);
     
-    let coverImageUrl = req.file ? `/uploads/${req.file.filename}` : undefined;
+    // Convert uploaded image to base64 data URI
+    let coverImageUrl;
+    if (req.file) {
+      const base64Image = req.file.buffer.toString('base64');
+      const mimeType = req.file.mimetype || 'image/png';
+      coverImageUrl = `data:${mimeType};base64,${base64Image}`;
+    }
     
-    // Generate AI cover image if no image uploaded
+    // Generate cover image if no image uploaded
     if (!coverImageUrl) {
         const tempBlog = await Blog.create({
             title,
