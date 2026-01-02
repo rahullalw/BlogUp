@@ -46,6 +46,25 @@ app.get("/", async (req, res) => {
 })
 app.use("/blog", blogRoute);
 
+// Warmup route to keep server alive (called by GitHub Actions)
+app.get("/warmup", async (req, res) => {
+    try {
+        //verify DB connection
+        // await Blog.findOne().limit(1).lean();
+        
+        return res.status(200).json({ 
+            status: "ok", 
+            timestamp: new Date().toISOString(),
+            message: "Server is alive"
+        });
+    } catch (error) {
+        return res.status(500).json({ 
+            status: "error", 
+            message: error.message 
+        });
+    }
+});
+
 app.listen(PORT, () => console.log(`Server is running or port: ${PORT}`));
 
 
