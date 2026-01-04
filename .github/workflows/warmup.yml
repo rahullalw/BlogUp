@@ -2,9 +2,9 @@ name: Keep Server Alive
 
 on:
   schedule:
-    # Run every 14 minutes (cron format: minute hour day month day-of-week)
+    # Run every 6 minutes (cron format: minute hour day month day-of-week)
     # This ensures the server stays awake on Render (15 min idle timeout)
-    - cron: '*/14 * * * *'
+    - cron: '*/6 * * * *'
   workflow_dispatch: # Allows manual trigger from GitHub UI
 
 jobs:
